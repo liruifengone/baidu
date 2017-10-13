@@ -1,0 +1,165 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<string.h>
+#include<conio.h>
+void Assignment();
+void shuffle(int *p);
+int getcard(char *command,char name,int *sum);
+int judge(char *command_1,char *command_2);
+
+struct card_s
+{
+	int number;
+	char dianshu[2];
+	char huase[10];
+}card[52];
+int i=0;
+int rank[52]={0};
+int main()
+{
+	srand((unsigned)time(NULL));
+	int  sum_1, sum_2;
+	char command_1 = 'a', command_2 = 'a';
+	char name_1='A',name_2='B';
+	Assignment();
+	do
+	{
+		sum_1=0;
+		sum_2=0;
+		system("cls");
+		i = 0;
+		shuffle(rank);
+		printf("Welcome to My Game <21 Point>\n");
+		printf("--------------------------------------------------------\n");
+		sum_1 += card[rank[i]].number;
+		printf("player A,your card is %s %s,and now your sum is %d\n", card[rank[i]].huase, card[rank[i]].dianshu, sum_1);
+		system("pause");
+		sum_2 += card[rank[++i]].number;
+		printf("player B,your card is %s %s,and now your sum is %d\n", card[rank[i]].huase, card[rank[i]].dianshu, sum_2);
+		system("pause");
+		while (command_1 == 'a' || command_2 == 'a')
+		{
+			if (command_1 == 'a')
+			{
+				if(getcard(&command_1,name_1,&sum_1)>21)
+				{
+					printf("player A ,sorry that you lost");
+					command_1='0';
+					command_2='0';
+				}
+				
+			}
+			if (command_2 == 'a')
+			{
+				if(getcard(&command_2,name_2,&sum_2)>21)
+				{	
+					printf("player B,sorry that you lose");
+					command_1='0';
+					command_2='0';
+				}
+			}
+			if (command_1 == 'b' && command_2 == 'b')
+				{
+					if ((sum_1 - sum_2) > 0)
+						printf("Player A wins\n");
+					else if (sum_1 == sum_2)
+						printf("push\n");
+					else
+						printf("Player B wins\n");
+				}
+		}
+	}while(judge(&command_1,&command_2));
+	system("cls");
+	printf("thank you\n");
+	system("pause");
+	return 0;
+}
+int judge(char *command_1,char *command_2)
+{
+	char command='b';
+	system("pause");
+	printf("Do you want to try again?\n");
+	printf("a.yes    b.no\n");
+	do
+	{
+			command=getchar();
+			if((command!='a')&&(command!='b'))
+				printf("input error .please input again\n");
+	}while((command!='a')&&(command!='b'));
+		if(command=='a')
+		{
+			*command_1='a';*command_2='a';
+			return 1;
+		}
+		return 0;
+}
+int getcard(char *command,char name,int *sum)
+{
+	printf("Player %c,Do you want this card?(please input a or b)\n",name);
+				printf("a.yes       b. no\n");
+				while (1)
+				{
+					*command=getchar();
+					if ((*command) != 'a'&&(*command) != 'b')
+						printf("input error,please input again\n");
+					else
+						break;
+				}
+				if (*command == 'a')	
+				{
+					*sum += card[rank[++i]].number;
+					printf("your next card is %s %s,now your sum is %d\n", card[rank[i]].huase, card[rank[i]].dianshu, *sum);
+					system("pause");
+				}
+					return *sum;
+}
+	void Assignment()
+{
+	int i = 0, j = 0;
+	int a = 0;
+	for (i=0;i<13;i++)
+		for (j = 0; j < 4; j++)
+		{
+			a = 4*i+j;
+			switch (i)
+			{
+			case 0:strcpy(card[a].dianshu,"A"); card[a].number = 11;break;
+			case 1:strcpy(card[a].dianshu,"2"); card[a].number = 2; break;
+			case 2:strcpy(card[a].dianshu, "3"); card[a].number = 3; break;
+			case 3:strcpy(card[a].dianshu, "4"); card[a].number = 4; break;
+			case 4:strcpy(card[a].dianshu, "5"); card[a].number = 5; break;
+			case 5:strcpy(card[a].dianshu, "6"); card[a].number = 6; break;
+			case 6:strcpy(card[a].dianshu, "7"); card[a].number = 7; break;
+			case 7:strcpy(card[a].dianshu, "8"); card[a].number = 8; break;
+			case 8:strcpy(card[a].dianshu, "9"); card[a].number = 9; break;
+			case 9:strcpy(card[a].dianshu, "10"); card[a].number = 10; break;
+			case 10:strcpy(card[a].dianshu, "J"); card[a].number = 10; break;
+			case 11:strcpy(card[a].dianshu, "Q"); card[a].number = 10; break;
+			case 12:strcpy(card[a].dianshu, "K"); card[a].number = 10;
+			}
+			switch (j)
+			{
+			case 0:strcpy(card[a].huase, "hongtao"); break;
+			case 1:strcpy(card[a].huase, "heitao"); break;
+			case 2:strcpy(card[a].huase, "meihua"); break;
+			case 3:strcpy(card[a].huase, "fangkuai"); 
+			}
+
+		}
+
+}
+	void shuffle(int *p)
+{
+	int a[52] = { 0 }, i, b = 0, j;
+	for (i = 1; i<53; i++)
+	{
+		do
+			b = (rand() % 52);
+		while (a[b]);
+		a[b] = i;
+	}
+	for (j = 0; j<52; j++)
+		*(p + j) = a[j] - 1;
+
+}
